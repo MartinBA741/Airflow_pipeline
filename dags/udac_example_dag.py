@@ -8,17 +8,28 @@ from helpers import SqlQueries
 
 # AWS_KEY = os.environ.get('AWS_KEY')
 # AWS_SECRET = os.environ.get('AWS_SECRET')
+default_args = {'owner': 'udacity',
+                'Depends_on_past': False,
+                'wait_for_downstream': True,
+                'start_date': datetime(2019, 1, 12),
+                'end_date': datetime(2019, 12, 12),
+                'max_active_runs': 1,
+                'email_on_failure': False,
+                'email_on_retry': False,
+                'retries': 3,
+                'retry_delay': timedelta(minutes=5),
+                'catchup': False,
+                }
 
-default_args = {
-    'owner': 'udacity',
-    'start_date': datetime(2019, 1, 12),
-}
+dims_load_type = 'append'
 
-dag = DAG('udac_example_dag',
-          default_args=default_args,
-          description='Load and transform data in Redshift with Airflow',
-          schedule_interval='0 * * * *'
-        )
+dag = DAG('data_pipeline_dag',
+            catchup=False,
+            default_args=default_args,
+            description='Load and transform data in Redshift with Airflow',
+            schedule_interval='@daily' # '0 * * * *'
+            )
+
 
 start_operator = DummyOperator(task_id='Begin_execution',  dag=dag)
 
