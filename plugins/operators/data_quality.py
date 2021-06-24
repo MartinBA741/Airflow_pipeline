@@ -20,6 +20,7 @@ class DataQualityOperator(BaseOperator):
 
 
     def execute(self, context):
+        '''Return test failed/passed '''
         for table in self.tables_list:
             self.log.info(f'Data quality test of table: {table}')
 

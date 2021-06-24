@@ -24,6 +24,7 @@ class LoadDimensionOperator(BaseOperator):
         self.truncate_insert=truncate_insert
 
     def execute(self, context):
+        '''Load dimension tables'''
         self.log.info(f'Loading  Dimension {self.table}')
         redshift_hook = PostgresHook(self.redshift_conn_id)
         columns = ','.join(self.column_list)

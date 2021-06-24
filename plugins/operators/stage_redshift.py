@@ -26,10 +26,8 @@ class StageToRedshiftOperator(BaseOperator):
         self.region = region
 
 
-
-  
-
     def execute(self, context):
+        '''Stage data from S3 to Redshift'''
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)

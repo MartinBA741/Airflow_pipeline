@@ -23,6 +23,7 @@ class LoadFactOperator(BaseOperator):
         self.select_sql = select_sql
 
     def execute(self, context):
+        '''Load Fact table'''
         self.log.info(f'Loading  Fact table {self.table}')
         redshift_hook = PostgresHook(self.redshift_conn_id)
         columns = ','.join(self.column_list)

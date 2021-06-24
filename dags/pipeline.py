@@ -12,7 +12,7 @@ default_args = {'owner': 'udacity',
                 'Depends_on_past': False,
                 'wait_for_downstream': True,
                 'start_date': datetime(2019, 1, 12),
-                'end_date': datetime(2019, 12, 12),
+                'end_date': datetime(2021, 1, 12),
                 'max_active_runs': 1,
                 'email_on_failure': False,
                 'email_on_retry': False,
@@ -24,7 +24,6 @@ default_args = {'owner': 'udacity',
 dims_load_type = 'append'
 
 dag = DAG('data_pipeline_dag',
-            owner='MartinBA'
             catchup=False,
             default_args=default_args,
             description='Load and transform data in Redshift with Airflow',
@@ -105,16 +104,6 @@ load_time_dimension_table = LoadDimensionOperator(
     dag=dag
 )
 
-
-# receive one or more SQL based test cases along with the expected results and execute the tests.
-#run_quality_checks = DataQualityOperator(
-#    task_id='Run_data_quality_checks',
-#    redshift_conn_id="redshift",
-#    tables=['songplays','songs','artists','time','users'],
-#    sql="select count(*) from {table}",
-#    expected_result="greater than 0",
-#    dag=dag
-#)
 
 run_quality_checks = DataQualityOperator(
     task_id='Run_data_quality_checks',
