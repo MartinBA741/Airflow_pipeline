@@ -3,7 +3,7 @@ This is the Repo of a full Apache Airflow ETL pipline. Data is extracted from ra
 
 
 ### DAG pipeline and dependencies
-![](https//github.com/MartinBA741/Airflow_pipeline/blob/main/DAG_image.PNG)
+![](DAG_image.PNG)
 
 ## Project structure
 This repo contains the following files:
