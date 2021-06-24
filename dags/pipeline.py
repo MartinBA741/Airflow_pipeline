@@ -24,6 +24,7 @@ default_args = {'owner': 'udacity',
 dims_load_type = 'append'
 
 dag = DAG('data_pipeline_dag',
+            owner='MartinBA'
             catchup=False,
             default_args=default_args,
             description='Load and transform data in Redshift with Airflow',
