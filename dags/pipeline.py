@@ -104,12 +104,22 @@ load_time_dimension_table = LoadDimensionOperator(
     dag=dag
 )
 
+
+# receive one or more SQL based test cases along with the expected results and execute the tests.
+#run_quality_checks = DataQualityOperator(
+#    task_id='Run_data_quality_checks',
+#    redshift_conn_id="redshift",
+#    tables=['songplays','songs','artists','time','users'],
+#    sql="select count(*) from {table}",
+#    expected_result="greater than 0",
+#    dag=dag
+#)
+
 run_quality_checks = DataQualityOperator(
     task_id='Run_data_quality_checks',
     redshift_conn_id="redshift",
-    tables=['songplays','songs','artists','time','users'],
-    sql="select count(*) from {table}",
-    expected_result="greater than 0",
+    tables_list=['songplays','songs','artists','time','users'],
+    provide_context=True,
     dag=dag
 )
 
