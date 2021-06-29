@@ -18,19 +18,27 @@ class DataQualityOperator(BaseOperator):
         self.redshift_conn_id = redshift_conn_id
         self.tables_list = tables_list
 
+    
 
-    def execute(self, context):
-        '''Return test failed/passed '''
-        for table in self.tables_list:
-            self.log.info(f'Data quality test of table: {table}')
-
-            redshift_hook = PostgresHook("redshift")
-            records = redshift_hook.get_records(f"SELECT COUNT(*) FROM {table}")
+def execute(self, context):
+        redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)      
+        for table in self.table_names:
+            records = redshift.get_records(f"Select count(*) from {table}")
+            self.log.info('DataQualityOperator checking for row count')
             if len(records) < 1 or len(records[0]) < 1:
-                self.log.info(f'Log message: Data quality check failed.')
-                raise ValueError(f"Data quality check failed. {table} returned no results")
-            
-            num_records = records[0][0]
-            if num_records < 1:
-                raise ValueError(f"Data quality check failed. {table} contained 0 rows")
-            logging.info(f"Data quality on table {table} check passed with {records[0][0]} records")
+                raise ValueError(f"Data quality check failed. {table} retuned no results")
+        
+        # list of dicts for check
+        dq_checks=[
+            {'table': 'users',
+             'check_sql': "SELECT COUNT(*) FROM users WHERE userid is null",
+             'expected_result': 0},
+            {'table': 'songs',
+             'check_sql': "SELECT COUNT(*) FROM songs WHERE songid is null",
+             'expected_result': 0}
+        ]
+        for check in dq_checks:
+            self.log.info('DataQualityOperator checking for Null ids')
+            records = redshift.get_records(check['check_sql'])[0]
+            if records[0] != check['expected_result']:
+                raise ValueError(f"Data quality check failed. {check['table']} contains null in id column, got {records[0]} instead")
