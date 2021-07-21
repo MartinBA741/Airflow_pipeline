@@ -27,7 +27,7 @@ dag = DAG('data_pipeline_dag',
             catchup=False,
             default_args=default_args,
             description='Load and transform data in Redshift with Airflow',
-            schedule_interval='@daily' # '0 * * * *'
+            schedule_interval= '@hourly' #'@daily' #'0 * * * *'
             )
 
 
